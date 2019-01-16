@@ -1,3 +1,10 @@
+/**
+ * 
+ * @param {*} array 
+ * 
+ * Returns a string that concatenates the content of array
+ */
+
 function join(array){
 
     if(!(array instanceof Array)) throw new Error('Argument not an array')
