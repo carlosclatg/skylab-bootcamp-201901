@@ -1,3 +1,10 @@
+/**
+ * 
+ * @param {Array} array 
+ * 
+ * return array reversed
+ */
+
 function reverse(array){
 
     if(!(array instanceof Array)) throw new Error ('Not an array')

@@ -1,6 +1,10 @@
 /*var a = {"a" : 10};
 var b = {};
 Object.assign(b,a);*/
+/**
+ * 
+ * @param {Array} arr 
+ */
 
 function shift(arr){
 

@@ -1,3 +1,11 @@
+/**
+ * 
+ * @param {Array} array 
+ * @param {Function} func 
+ * 
+ * returns true if element fit conditions in the function
+ */
+
 function some(array, func){
     if(!(array instanceof Array)) throw new Error('Not an array')
     if(!(func instanceof Function)) throw new Error('Not a function')

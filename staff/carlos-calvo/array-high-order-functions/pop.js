@@ -1,4 +1,9 @@
-//Removes last element and returns it
+/**
+ * 
+ * @param {Array} array 
+ *///Removes last element and returns it
+
+
 
 function pop(array) {
 

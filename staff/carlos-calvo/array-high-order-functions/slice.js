@@ -1,3 +1,10 @@
+/**
+ * 
+ * @param {Array} array 
+ * @param {Number} start 
+ * @param {Number} end 
+ */
+
 function slice(array, start, end){
     if(!array instanceof Array) throw new Error('Not an array!')
     if(arguments.length==1) {
