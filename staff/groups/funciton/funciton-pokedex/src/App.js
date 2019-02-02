@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import './components/DetailedPokemonPanel'
+import DetailedPokemonPanel from './components/DetailedPokemonPanel';
 
 class App extends Component {
   render() {
@@ -20,6 +22,11 @@ class App extends Component {
             Learn React
           </a>
         </header>
+
+          <DetailedPokemonPanel></DetailedPokemonPanel>
+
+
+
       </div>
     );
   }
