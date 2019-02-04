@@ -172,7 +172,7 @@ class App extends Component {
           </a>
         </header>
 
-        <DetailedPokemonPanel name={'ditto'} stats={statsReal} abilities={realAbilities} moves={RealMoves} types = {RealTypes} heldItems = {RealHeldItems} heigth={'3'}weight={'3'}/>
+        <DetailedPokemonPanel name={'ditto'.toUpperCase()} stats={statsReal} abilities={realAbilities} moves={RealMoves} types = {RealTypes} heldItems = {RealHeldItems} heigth={'3'}weight={'3'}/>
 
 
 
