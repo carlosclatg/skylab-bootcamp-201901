@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+
+section(classname='search')
+	h2 {title}
+	form(onsubmit='{handleSearchSubmit}')
+		input(type='text', placeholder='Search an artist...', onchange='{handleQueryInput}')
+		button(type='submit') Search
