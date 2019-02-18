@@ -1,6 +1,4 @@
-extends ../album/index
-
-block tracks     
+mixin tracks(tracks)   
   section.search.container
     div.containerh2
      h2.badge-dark Track List
@@ -11,4 +9,3 @@ block tracks
         div.footerfromcard
           h6.justify-content-center.flex-nowrap.card-title= track.name
           a.justify-content-center.btn.btn-primary(href=`/track/${track.id}`) Listen
-  block trackSelected   

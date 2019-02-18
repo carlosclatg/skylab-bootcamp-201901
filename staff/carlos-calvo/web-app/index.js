@@ -5,9 +5,6 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 // const FileStore = require('session-file-store')(session)
 const logicFactory = require('./src/logic-factory')
-let artistList = null 
-let albumList =  null
-let trackList = null
 
 
 
@@ -81,19 +78,18 @@ app.get('/login', (req, res) => {
     const logic = logicFactory.create(req)
 
     if (logic.isUserLoggedIn) {
+        
         res.redirect('/home')
     } else {
         const feedback = pullFeedback(req)
-
         res.render('login', { feedback })
     }
 })
 
 app.post('/login', formBodyParser, (req, res) => {
     const { body: { email, password } } = req
-
+    
     const logic = logicFactory.create(req)
-
     try {
         logic.logInUser(email, password)
             .then(() => res.redirect('/home'))
@@ -104,29 +100,31 @@ app.post('/login', formBodyParser, (req, res) => {
             })
     } catch ({ message }) {
         req.session.feedback = message
-
         res.redirect('/login')
     }
 })
 
 app.get('/home', (req, res) => {
     try {
-        const { session: { feedback } } = req
-
+        let feedback = req.session.feedback
         const logic = logicFactory.create(req)
-
+        
         if (logic.isUserLoggedIn)
             logic.retrieveUser()
-                .then(user => res.render('home',{name : user.name, feedback} ))
+                .then(user => {
+                    req.session.name = user.name
+                    
+                    let name = user.name
+                    return res.render('home',{name, feedback} )
+                })
                 .catch(({ message }) => {
                     req.session.feedback = message
-
-                    res.redirect('/home', artistList)
+                    let feedback = req.session.feedback
+                    res.redirect('/home', {feedback})
                 })
         else res.redirect('/login')
     } catch ({ message }) {
         req.session.feedback = message
-
         res.redirect('/home')
     }
 })
@@ -140,6 +138,11 @@ app.post('/logout', (req, res) => {
 
 app.post('/searchArtist', formBodyParser, (req, res) => {
     const { body: { artist } } = req
+    
+    req.session.artists = null
+    req.session.feedback = null
+    req.session.albums = null
+    req.session.tracks = null
     res.redirect(`/searchArtist/${artist}`)  
 })
 
@@ -150,10 +153,20 @@ app.get('/searchArtist/:artist', (req, res) =>{
         const logic = logicFactory.create(req)
         logic.searchArtists(artist)
             .then(artists =>{
-                res.render('artist', {artists})
-                }) 
+                let name = req.session.name
+                let feedback = req.session.feedback
+                req.session.artists = artists
+                res.render('home', {artists, name, feedback})
+            })
+            .catch(({ message }) => {
+                req.session.feedback = message
+                const feedback = pullFeedback(req)
+                res.render('home', { feedback })
+            })
     } catch (error){
-        console.log(error.message)
+        req.session.feedback = error.message
+        const feedback = pullFeedback(req)
+        res.render('home', { feedback })
     }
 })
 
@@ -163,11 +176,16 @@ app.get('/artist/:artistid', formBodyParser, (req, res) => {
         const logic = logicFactory.create(req)
         logic.retrieveAlbums(artistid)
             .then(albums =>{
-                albumList = albums
-                res.render('album', {albums})
+                req.session.albums = albums
+                let feedback = req.session.feedback
+                let name = req.session.name
+                let artists = req.session.artists
+                res.render('home', {artists, albums, name, feedback})
                 }) 
     } catch (error){
-        console.log(error.message)
+        req.session.feedback = message
+        const feedback = pullFeedback(req)
+        res.render('home', { feedback })
     }
 })
 
@@ -177,12 +195,17 @@ app.get('/album/:albumid', formBodyParser, (req, res) => {
         const logic = logicFactory.create(req)
         logic.retrieveTracks(albumid)
             .then(tracks =>{
-                console.log(tracks)
-                trackList = tracks
-                res.render('tracks', {tracks})
+                let artists = req.session.artists
+                let albums = req.session.albums
+                let feedback = req.session.feedback
+                req.session.tracks = tracks
+                let name = req.session.name
+                res.render('home', {artists, albums, tracks, name})
                 }) 
     } catch (error){
-        console.log(error.message)
+        req.session.feedback = message
+        const feedback = pullFeedback(req)
+        res.render('home', { feedback })
     }
 })
 
@@ -191,11 +214,13 @@ app.get('/track/:trackid', formBodyParser, (req, res) => {
     try{
         const logic = logicFactory.create(req)
         logic.retrieveTrack(trackid)
-            .then(track =>{
-                res.render('trackSelected', {track})
+            .then(trackSelected =>{
+                let name = req.session.name
+                res.render('home', {trackSelected, name})
                 }) 
     } catch (error){
-        console.log(error.message)
+        req.session.feedback = message
+        res.redirect('/home', {feedback})
     }
 })
 

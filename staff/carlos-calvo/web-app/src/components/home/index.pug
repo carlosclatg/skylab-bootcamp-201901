@@ -1,5 +1,12 @@
 extends ../layout
 
+include ../artist/index
+include ../album/index
+include ../tracks/index
+include ../trackSelected/index
+include ../feedback/index
+
+
 block content
 	section.home
 		div
@@ -9,8 +16,17 @@ block content
 	div.row.justify-content-center
 		div.form-group.mx-sm-3.mb-2.col-4.d-flex.justify-content-center
 			form(method='post' action='/searchArtist').row.justify-content-center
-				input#inputPassword2.form-control(type='text', placeholder='Artist...' name='artist').col-12
+				input#inputPassword2.form-control(type='text', placeholder='Artist...' name='artist' required).col-12
 				div.col-3
 				button.btn.btn-primary.mb-2(type='submit').col-6 Search
 				div.col-3
-	block artist
+		if(feedback)
+			+feedback(feedback)
+	if trackSelected
+		+trackSelected(trackSelected)
+	if tracks
+		+tracks(tracks)
+	if albums
+		+album(albums)
+	if artists
+		+artist(artists)

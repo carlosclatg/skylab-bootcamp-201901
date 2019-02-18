@@ -1,6 +1,4 @@
-extends ../artist/index
-
-block album     
+mixin album(albums)   
   section.search.container
     div.containerh2
      h2.badge-dark Album List
@@ -12,4 +10,3 @@ block album
         div.footerfromcard
           h6.justify-content-center.flex-nowrap= album.name
           a.justify-content-center.btn.btn-primary(href=`/album/${album.id}`) Select
-  block tracks    
