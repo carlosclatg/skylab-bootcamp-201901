@@ -5,13 +5,14 @@ include ../feedback/index
 block content
     section.login
       h2 Login
-      form(method='POST', action='/login')
-        input(name='email', type='email', placeholder='email', required='')
-        input(name='password', type='password', placeholder='password', required='')
-        button(type='submit') Login
+      div.row.d-flex.justify-content-center
+        form.containerLogin.col-sm-8.col-md-4(method='POST', action='/login')
+          input.m-1(name='email', type='email', placeholder='email', required='')
+          input.m-1(name='password', type='password', placeholder='password', required='')
+          button.m-1.btn.btn-success(type='submit') Login
       if feedback
         +feedback(feedback, 'error')
-      | Go 
-      a(href='/') Home
+      | Or Go 
+      a.badge.badge-primary(href='/') Home
       |  or 
-      a(href='/register') Register
+      a.badge.badge-success(href='/register') Register

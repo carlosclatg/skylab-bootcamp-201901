@@ -6,15 +6,22 @@ block content
     section.register
       h2 Register
       form(method='POST', action='/register')
-        input(name='name', type='text', placeholder='name', required='')
-        input(name='surname', type='text', placeholder='surname', required='')
-        input(name='email', type='email', placeholder='email', required='')
-        input(name='password', type='password', placeholder='password', required='')
-        input(name='passwordConfirm', type='password', placeholder='confirm password', required='')
-        button(type='submit') Register
+        div.formregister
+          div.row.d-flex.justify-content-center
+            input.col-sm-10.col-md-6.col-lg-5(name='name', type='text', placeholder='name', required='')
+          div.row.d-flex.justify-content-center
+            input.col-sm-10.col-md-6.col-lg-5(name='surname', type='text', placeholder='surname', required='')
+          div.row.d-flex.justify-content-center
+            input.col-sm-10.col-md-6.col-lg-5(name='email', type='email', placeholder='email', required='')
+          div.row.d-flex.justify-content-center
+            input.col-sm-10.col-md-6.col-lg-5(name='password', type='password', placeholder='password', required='')
+          div.row.d-flex.justify-content-center
+            input.col-sm-10.col-md-6.col-lg-5(name='passwordConfirm', type='password', placeholder='confirm password', required='')
+          div.row.d-flex.justify-content-center
+            button.col-sm-10.col-md-6.col-lg-5.btn.btn-info(type='submit') Register
       if feedback
         +feedback(feedback, 'warn')
       | Go 
-      a(href='/') Home
+      a.badge.badge-primary(href='/') Home
       |  or 
-      a(href='/login') Login
+      a.badge.badge-success(href='/login') Login

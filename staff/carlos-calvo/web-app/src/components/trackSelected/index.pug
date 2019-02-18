@@ -1,0 +1,8 @@
+extends ../tracks/index
+
+block trackSelected     
+  section.container.trackSelected
+    h2 Track Playing...
+    if track
+      h4= track.name
+      audio(src=`${track.preview_url}`, controls, autoPlay)

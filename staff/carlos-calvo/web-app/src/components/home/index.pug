@@ -1,16 +1,16 @@
 extends ../layout
 
 block content
-
 	section.home
+		div
 		h2= `Welcome ${name}`
 		form(action='/logout', method='post')
-			button(type='submit') Logout
-
-	section(classname='search')
-	h2 Spotify App
-	form(method='post' action='/searchArtist')
-		input(type='text', placeholder='Search an artist...' name='artist')
-		button(type='submit') Search
-		if(artistList)
-			+artist(artistList)
+			button(type='submit' class='btn btn-danger') Logout
+	div.row.justify-content-center
+		div.form-group.mx-sm-3.mb-2.col-4.d-flex.justify-content-center
+			form(method='post' action='/searchArtist').row.justify-content-center
+				input#inputPassword2.form-control(type='text', placeholder='Artist...' name='artist').col-12
+				div.col-3
+				button.btn.btn-primary.mb-2(type='submit').col-6 Search
+				div.col-3
+	block artist

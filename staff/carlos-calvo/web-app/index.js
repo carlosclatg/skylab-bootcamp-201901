@@ -5,13 +5,16 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 // const FileStore = require('session-file-store')(session)
 const logicFactory = require('./src/logic-factory')
-const artistList = null 
-const albumList =  null
-const trackList = null
+let artistList = null 
+let albumList =  null
+let trackList = null
+
+
 
 const { env: { PORT }, argv: [, , port = PORT || 8080] } = process
 
 const app = express()
+
 
 app.use(session({
     secret: 'a secret phrase',
@@ -23,7 +26,7 @@ app.use(session({
 }))
 
 app.use(express.static('public'))
-
+app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'pug')
 app.set('views', './src/components')
 
@@ -50,7 +53,6 @@ app.get('/register', (req, res) => {
         res.redirect('/home')
     } else {
         const feedback = pullFeedback(req)
-
         res.render('register', { feedback })
     }
 })
@@ -132,7 +134,6 @@ app.get('/home', (req, res) => {
 app.post('/logout', (req, res) => {
     const logic = logicFactory.create(req)
     logic.logOutUser()
-
     res.redirect('/searchArtist')
 })
 
@@ -145,17 +146,60 @@ app.post('/searchArtist', formBodyParser, (req, res) => {
 
 app.get('/searchArtist/:artist', (req, res) =>{
     const { params: { artist } } = req
-    
     try{
         const logic = logicFactory.create(req)
         logic.searchArtists(artist)
-            .then(results =>{
-                artistList = results
-                res.render('artist', {results})
+            .then(artists =>{
+                res.render('artist', {artists})
                 }) 
     } catch (error){
+        console.log(error.message)
     }
 })
+
+app.get('/artist/:artistid', formBodyParser, (req, res) => {
+    const { params: { artistid } } = req
+    try{
+        const logic = logicFactory.create(req)
+        logic.retrieveAlbums(artistid)
+            .then(albums =>{
+                albumList = albums
+                res.render('album', {albums})
+                }) 
+    } catch (error){
+        console.log(error.message)
+    }
+})
+
+app.get('/album/:albumid', formBodyParser, (req, res) => {
+    const { params: { albumid } } = req
+    try{
+        const logic = logicFactory.create(req)
+        logic.retrieveTracks(albumid)
+            .then(tracks =>{
+                console.log(tracks)
+                trackList = tracks
+                res.render('tracks', {tracks})
+                }) 
+    } catch (error){
+        console.log(error.message)
+    }
+})
+
+app.get('/track/:trackid', formBodyParser, (req, res) => {
+    const { params: { trackid } } = req
+    try{
+        const logic = logicFactory.create(req)
+        logic.retrieveTrack(trackid)
+            .then(track =>{
+                res.render('trackSelected', {track})
+                }) 
+    } catch (error){
+        console.log(error.message)
+    }
+})
+
+///album/${album.id}
 
 ///app.get('*', (req, res) => res.status(404).render('Componente404'))
 

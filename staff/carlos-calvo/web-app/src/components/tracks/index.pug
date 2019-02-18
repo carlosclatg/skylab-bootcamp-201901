@@ -1,0 +1,14 @@
+extends ../album/index
+
+block tracks     
+  section.search.container
+    div.containerh2
+     h2.badge-dark Track List
+    if tracks
+     div.row.container-fluid.m-2
+      each track in tracks
+       div.card.col-md-4.col-lg-3.col-sm-6.col-xl-2.pt-2.cardclass
+        div.footerfromcard
+          h6.justify-content-center.flex-nowrap.card-title= track.name
+          a.justify-content-center.btn.btn-primary(href=`/track/${track.id}`) Listen
+  block trackSelected   

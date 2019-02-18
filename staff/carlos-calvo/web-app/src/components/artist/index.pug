@@ -1,21 +1,15 @@
-extends ../layout
+extends ../home/index
 
-block content
-
-	section.home
-		h2= `Welcome ${name}`
-		form(action='/logout', method='post')
-			button(type='submit') Logout
-
-	section(classname='search')
-	h2 Spotify App
-	form(method='post' action='/searchArtist')
-		input(type='text', placeholder='Search an artist...' name='artist')
-		button(type='submit') Search
-		if(artistList)
-			+artist(artistList)
-
-    section(classname='resultsSearch')
-        ul
-            each item in results
-                li= item.name
+block artist
+ section.search.container
+   div.containerh2
+    h2.badge-dark Artist List
+   if artists
+    div.row.container-fluid.m-2
+     each artist in artists
+       div.card.col-md-4.col-lg-3.col-sm-6.col-xl-2.pt-2.cardclass
+        img.card-img-top(src=`${artist.images[0] ? artist.images[0].url : 'https://images-na.ssl-images-amazon.com/images/I/51rttY7a%2B9L.png'}`, alt='Group image', width='80%' height='auto')
+        div.footerfromcard
+          h6.justify-content-center.flex-nowrap.card-title= artist.name
+          a.justify-content-center.btn.btn-primary(href=`/artist/${artist.id}`) Select
+ block album
