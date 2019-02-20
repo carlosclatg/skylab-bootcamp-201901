@@ -100,12 +100,11 @@ const logic = {
         if (!artistId.trim().length) throw Error('artistId is empty')
 
         return spotifyApi.retrieveArtist(artistId)
-            // TODO once artistComment is already implemented
-            // .then(artist =>
-            //     artistComment.find({ artistId: artist.id })
-            //         .then(comments => artist.comments = comments)
-            //         .then(() => artist)
-            // )
+            .then(artist =>
+                artistComment.find({ artistId: artist.id })
+                    .then(comments => artist.comments = comments)
+                    .then(() => artist)
+            )
     },
 
     /**
@@ -127,9 +126,22 @@ const logic = {
             })
     },
 
-    // addCommentToArtist(userId, token, artistId, comment) {
-    //     if(userId)
-    // },
+    addCommentToArtist(userId, token, artistId, comment) {
+        if (typeof userId !== 'string') throw TypeError(`${userId} is not a string`)
+        if (!userId.trim().length) throw Error('userId is empty')
+
+        if (typeof token !== 'string') throw TypeError(`${token} is not a string`)
+        if (!token.trim().length) throw Error('token is empty')
+
+        if (typeof artistId !== 'string') throw TypeError(`${artistId} is not a string`)
+        if (!artistId.trim().length) throw Error('artistId is empty')
+
+        if (typeof comment !== 'string') throw TypeError(`${comment} is not a string`)
+        if (!comment.trim().length) throw Error('comment is empty')
+
+        
+
+    },
 
     /**
      * Retrieves albums from artist.

@@ -1,62 +1,89 @@
 const uuid = require('uuid/v4')
-const fs = require('fs').promises
+const fs = require('fs')
 const path = require('path')
-
-
+const file = path.join(__dirname, 'artist-comments.json')
 const artistComment = {
-    add(comment){ 
-        comment.id= uuid()
-        const file = path.join(__dirname, 'artist-comments.json')
-        fs.readFile(file, 'utf8')
-        .then(data =>{
-            data=JSON.parse(data)
-            data.push(comment)
-            dataJS = JSON.stringify(data)
-            fs.writeFile(file, dataJS, err => {
-                if (err) throw err
-                return 
-            })
-        })    
-    },
 
-    retrieve(id){ //Param: Comment.id, returns the comment object
-        const file = path.join(__dirname, 'artist-comments.json')
-        return fs.readFile(file, 'utf8')
-        .then((data) => {
-            data.filter(comment => comment.id = id)
-            return data
-        })
+    add(comment){ 
+        
+        comment.id= uuid()
+        return new Promise((resolve,reject)=>
+            fs.readFile(file, 'utf8',((err,data) =>{
+                if(err) return reject(err)
+                data=JSON.parse(data)
+                data.push(comment)
+                dataJS = JSON.stringify(data)
+                fs.writeFile(file, dataJS, err => {
+                    if (err) return reject(err) 
+                    resolve(true)
+                })
+                
+            }))   
+            
+        )
+    },
+    retrieve(id) { //Param: Comment.id, returns the comment object
+        
+        return new Promise((resolve, reject) =>
+            fs.readFile(file,'utf8',((err, data) =>{
+                data=JSON.parse(data) 
+                data = data.filter(comment => comment.id == id)
+                if(err) return reject(err)
+                resolve(data[0])
+            }))
+        )
     },
 
     update(newComment){ //Overrides a comment
-        const file = path.join(__dirname, 'artist-comments.json')
-        return fs.readFile(file, 'utf8')
-        .then((data) => {
-            data = JSON.parse(data)
-            objectToReplace = data.find(comment => comment.id = newComment.id)
-            console.log(objectToReplace)
-            Object.assign(objectToReplace, newComment)
-            console.log(data)
-            return fs.writeFile(file, data, err => {
-                if (err) throw err
-                return true
-            })
-        })
+        return new Promise ((resolve,reject)=>
+            fs.readFile(file, 'utf8',((err,data) => {
+                data = JSON.parse(data)
+                objectToReplace = data.find(comment => comment.id === newComment.id)
+                if(err) return reject(err)
+                Object.assign(objectToReplace, newComment)
+                dataJSON = JSON.stringify(data)
+                fs.writeFile(file, dataJSON, err => {
+                    if (err)  return reject(err) 
+                    resolve() 
+                })
+            }))
+        )
+        
+
     },
-    
+
     delete(id){ //Deletes a comment, param comment.id
-        const file = path.join(__dirname, 'artist-comments.json')
-        return fs.readFile(file, 'utf8')
-        .then((data) => {
-            data = JSON.parse(data)
-            objectToReplace = data.find(comment => comment.id = newComment.id)
-            console.log(objectToReplace)
-            Object.assign(objectToReplace, newComment)
+        return new Promise ((resolve,reject) =>
+            fs.readFile(file, 'utf8',((err,data) => {
+                data = JSON.parse(data)
+                let index = data.findIndex(comment => comment.id === id)
+                data.splice(index, 1)
+                if(err) return reject(err)
+                let dataJSON = JSON.stringify(data)
+                fs.writeFile(file, dataJSON, err => {
+                    if (err) return reject(err) 
+                    resolve(true) 
+                })
+            }))
+        )
     },
 
-    find(){ //PAL FINAL
-
+    find(criteria){
+        return new Promise ((resolve,reject) =>
+            fs.readFile(file, 'utf8',((err,data) => {
+                if(err) return reject(err)
+                data = JSON.parse(data)
+                let filtered = data.filter(comment => {
+                    for (const key in criteria){
+                        if (comment[key] !== criteria[key]) return false
+                    }
+                    return true
+                })
+                filtered.forEach(comment => comment.date = new Date(comment.date))
+                return resolve(filtered)
+            }))
+        )
     }
 }
 
-module.exports = artistComment;
+module.exports = artistComment
