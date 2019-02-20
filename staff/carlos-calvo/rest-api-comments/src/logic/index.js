@@ -127,9 +127,9 @@ const logic = {
             })
     },
 
-    addCommentToArtist(userId, token, artistId, comment) {
-        // TODO use artistComment
-    },
+    // addCommentToArtist(userId, token, artistId, comment) {
+    //     if(userId)
+    // },
 
     /**
      * Retrieves albums from artist.
@@ -220,6 +220,9 @@ const logic = {
                 return userApi.update(userId, token, { favoriteTracks })
             })
     }
+
+
+   
 }
 
 module.exports = logic

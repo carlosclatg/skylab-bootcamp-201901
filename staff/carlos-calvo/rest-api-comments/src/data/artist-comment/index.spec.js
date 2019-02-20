@@ -15,8 +15,11 @@ describe('artist comments data', () => {
         }
 
         it('should succeed on correct data', () =>
-            artistComment.add(comment)
+            fs.open('./artistcomments.json', 'w', (err, file) => {
+                if (err) throw err
+                return artistComment.add(comment)
                 .then(() => expect(comment.id).toBeDefined())
+            })
         )
     })
 
